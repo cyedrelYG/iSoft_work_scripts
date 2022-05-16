@@ -1,0 +1,346 @@
+#!/bin/bash
+
+log0=/opt/sftw/build/CLIENT/logLima.txt
+log1=/opt/sftw/build/CLIENT/logClient.txt
+log2=/opt/lima/build/CLIENT/logLima.txt
+log3=/opt/lima/build/CLIENT/logClient.txt
+lsb=/opt/sftw/build/BACKSERVER
+llb=/opt/lima/build/BACKSERVER
+player=/opt/sftw/build/player
+player1=/opt/lima/build/player
+st=/opt/speedtest
+md5=/opt/lima/build
+md51=/opt/sftw/build
+root=/root
+scl=/opt/sftw/build/CLIENT
+lcl=/opt/lima/build/CLIENT
+
+echo; 
+echo -e "UNIVERSAL SCRIPT by YG v1.1\n"
+if [ -f $llb/mc3_key.txt ]
+then
+  echo "DIRECTORY LIMA"
+  echo "MC3_KEY: $(cat $llb/mc3_key.txt)"
+  echo "VER: $(cat $llb/ver)"
+elif [ -f $lsb/mc3_key.txt ]
+then
+  echo "DIRECTORY SFTW"
+  echo "MC3_KEY: $(cat $lsb/mc3_key.txt)"
+  echo "VER: $(cat $lsb/ver)"
+else 
+  echo "MC3_KEY: The device is not registered"
+  echo "VER: $(cat $lsb/ver)"
+fi
+echo "DEVICE SERVER VERSION:$(head -n1 /var/log/devices_server.log 2> /dev/null | awk '{print $5}')" 
+echo "PRINTER:$( lsusb -v |grep -i produ | grep 'IP COUPON DEVICE' | awk '{$1=$2=""; print $0}' ; lsusb -v |grep -i produ | grep 'TG02-H' | awk '{$1=$2=""; print $0}' ; lsusb -v |grep -i produ | grep 'ICT SP1-BX' | awk '{$1=$2=""; print $0}')"
+echo "BA:$( lsusb -v |grep -i produ | grep 'NV9USB' | awk '{$1=$2=""; print $0}')"
+echo "Peripherals found by device_server:"
+echo "$(cat -A /var/log/devices_server.log 2> /dev/null | grep 'Found dispenser devices:\|Found printer devices:\|Found bill acceptor devices:\|Found scanner devices:'  | awk '{$1=$2=$3=""; print $0}' | tail -n4)" 
+echo -e "MENU:\n"
+echo "1-AUTO config for Chicago zones"
+echo "Other options:"
+echo "2 - BACKUP"
+echo "3 - RESTORE"
+echo "4 - CLEAN REPORTS"
+echo "5 - DEVICE SERVER 7748d39"
+echo "6 - SPEEDTEST"
+echo "7 - Device F1 menu"
+echo "8 - LOGS MENU"
+echo "9 - MD5 CHECK"
+echo "Choose option number and press ENTER:"
+read Keypress
+case "$Keypress" in
+  [0-0]   ) echo "Delete script from device"
+rm /usr/local/bin/ygunis ; rm /root/kill.sh 
+echo "DONE";;
+  [1-1]   )
+echo -e "Zones:\n" 
+echo "1 - PURPLE"
+echo "2 - GREEN"
+echo "3 - ORANGE"
+echo "4 - Back to main menu"
+echo "Choose Chicago zone:"
+read Keypress
+case "$Keypress" in
+	  [1-1]   ) echo "PURPLE"
+if [ -d $llb ]
+then
+      cd $llb
+      mv withdraw_template.hwd2.txt withdraw_template.hwd2.txt_`date +%d%b%Y` 
+      mv config.ini.aes config.ini.aes_`date +%d%b%Y`
+
+      wget -c https://suportfiles.s3.amazonaws.com/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/withdraw_template.hwd2.txt
+      wget -c https://suportfiles.s3.amazonaws.com/YGscripts/Giftmaster/lima/config.ini.aes
+  else
+      cd $lsb
+      mv withdraw_template.hwd2.txt withdraw_template.hwd2.txt_`date +%d%b%Y` 
+      mv config.ini.aes config.ini.aes_`date +%d%b%Y`
+
+      wget -c https://suportfiles.s3.amazonaws.com/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/withdraw_template.hwd2.txt
+      wget -c https://suportfiles.s3.amazonaws.com/YGscripts/Giftmaster/sftw/config.ini.aes
+  fi
+
+
+
+if [ -d $player ]
+then
+     echo "The PLAYER ENABLE SFTW" 
+     cd /opt/sftw/build/player && 
+     rm screensaver.mp4 ;
+     wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/screensaver.mp4
+else
+        mkdir /opt/sftw/build/player &&
+        cd /opt/sftw/build/player &&
+        wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/ffmpeg_player_simple_update &&
+        wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/screensaver.mp4 &&
+        chmod +x ffmpeg_player_simple_update
+
+fi
+
+if [ -d $player1 ]
+then
+      echo "The PLAYER ENABLE LIMA"
+      cd /opt/lima/build/player &&
+      rm screensaver.mp4 ;
+      wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/screensaver.mp4
+else
+        mkdir /opt/lima/build/player && 
+        cd /opt/lima/build/player &&
+        wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/ffmpeg_player_simple_update &&
+        wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/screensaver.mp4 &&
+        chmod +x ffmpeg_player_simple_update
+    fi
+killall -9 client.x86_64
+cd $root
+echo "DONE";;
+	  [2-2]   ) echo "GREEN"
+if [ -d $llb ]
+then
+      cd $llb
+      mv withdraw_template.hwd2.txt withdraw_template.hwd2.txt_`date +%d%b%Y` 
+      mv config.ini.aes config.ini.aes_`date +%d%b%Y`
+
+      wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/grabsomestuff.biz/example/withdraw_template.hwd2.txt
+      wget -c https://suportfiles.s3.amazonaws.com/YGscripts/Grabsomestaff/lima/config.ini.aes
+  else
+      cd $lsb
+      mv withdraw_template.hwd2.txt withdraw_template.hwd2.txt_`date +%d%b%Y` 
+      mv config.ini.aes config.ini.aes_`date +%d%b%Y`
+
+      wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/grabsomestuff.biz/example/withdraw_template.hwd2.txt
+      wget -c https://suportfiles.s3.amazonaws.com/YGscripts/Grabsomestaff/sftw/config.ini.aes
+  fi
+
+
+if [ -d $player ]
+then
+     echo "The PLAYER ENABLE SFTW" 
+     cd /opt/sftw/build/player && 
+     rm screensaver.mp4 ;
+     wget -c https://suportfiles.s3.amazonaws.com/USA/USA/CHICAGO_NEW/grabsomestuff.biz/screensaver.mp4
+else
+        mkdir /opt/sftw/build/player &&
+        cd /opt/sftw/build/player &&
+        wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/ffmpeg_player_simple_update &&
+        wget -c https://suportfiles.s3.amazonaws.com/USA/USA/CHICAGO_NEW/grabsomestuff.biz/screensaver.mp4 &&
+        chmod +x ffmpeg_player_simple_update
+
+fi
+
+if [ -d $player1 ]
+then
+      echo "The PLAYER ENABLE LIMA"
+      cd /opt/lima/build/player &&
+      rm screensaver.mp4 ;
+      wget -c https://suportfiles.s3.amazonaws.com/USA/USA/CHICAGO_NEW/grabsomestuff.biz/screensaver.mp4
+else
+        mkdir /opt/lima/build/player && 
+        cd /opt/lima/build/player &&
+        wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/USA/CHICAGO_NEW/GIFTMASTER_purple/ffmpeg_player_simple_update &&
+        wget -c https://suportfiles.s3.amazonaws.com/USA/USA/CHICAGO_NEW/grabsomestuff.biz/screensaver.mp4 &&
+        chmod +x ffmpeg_player_simple_update
+    fi
+killall -9 client.x86_64
+cd $root
+echo "DONE";;
+	  [3-3]   ) echo "ORANGE"
+if [ -d $llb ]
+then
+cd $llb
+mv withdraw_template.hwd2.txt withdraw_template.hwd2.txt_`date +%d%b%Y` 
+mv config.ini.aes config.ini.aes_`date +%d%b%Y`
+
+wget -c https://suportfiles.s3.amazonaws.com/USA/USA/CHICAGO_NEW/CHEAPEREST_orange/withdraw_template.hwd2.txt
+wget -c https://suportfiles.s3.amazonaws.com/YGscripts/Orange/lima/config.ini.aes
+else 
+  cd $lsb
+mv withdraw_template.hwd2.txt withdraw_template.hwd2.txt_`date +%d%b%Y` 
+mv config.ini.aes config.ini.aes_`date +%d%b%Y`
+
+wget -c https://suportfiles.s3.amazonaws.com/USA/USA/CHICAGO_NEW/CHEAPEREST_orange/withdraw_template.hwd2.txt
+wget -c https://suportfiles.s3.amazonaws.com/YGscripts/Orange/sftw/config.ini.aes
+fi
+
+if [ -d $player ]
+then
+echo "The PLAYER ENABLE"
+    cd /opt/sftw/build/player && rm screensaver.mp4
+else
+  cd /opt/lima/build/player && rm screensaver.mp4
+fi
+killall -9 client.x86_64
+cd $root
+echo "DONE";;
+	  [4-4]   )
+      clear
+	  ygunis;;
+esac;;
+    [2-2]   ) echo "BACKUP"
+if [ -d $llb ]
+ then
+        echo "MC3_KEY: $(cat $llb/mc3_key.txt)"
+ else
+        echo "MC3_KEY: $(cat $lsb/mc3_key.txt)"
+fi
+
+if [ -d $llb ]
+then
+        cd $root
+        cp $llb/mc3_key.txt /root/mc3_key.txt && cp $llb/db/spin.db /root/spin.db
+        tar -czvf $(cat $llb/withdraw.hwd2.print | grep -a  'terminal_id' | grep -o -P '(?<=terminal_id).*(?=")')backup.tar.gz  spin.db  mc3_key.txt
+else
+        cd $root     
+        cp $lsb/mc3_key.txt /root/mc3_key.txt && cp $lsb/db/spin.db /root/spin.db
+        tar -czvf $(cat $lsb/withdraw.hwd2.print | grep -a  'terminal_id' | grep -o -P '(?<=terminal_id).*(?=")')backup.tar.gz  spin.db  mc3_key.txt
+fi
+rm $root/spin.db $root/mc3_key.txt
+
+echo "DONE";;
+    [3-3]   ) echo "RESTORE"
+if [ -d $llb ]
+then
+    mv $llb/mc3_key.txt $llb/mc3_key.txt$(date +%y-%m-%d-%H:%M:%S) 2>/dev/null && mv $llb/db/spin.db $llb/db/spin.db$(date +%y-%m-%d-%H:%M:%S) 2>/dev/null
+    mkdir $llb/db 2>/dev/null
+    tar -xf *backup.tar.gz -C $llb/db/ spin.db
+    tar -xf *backup.tar.gz -C $llb/ mc3_key.txt
+else
+    mv $lsb/mc3_key.txt $lsb/mc3_key.txt$(date +%y-%m-%d-%H:%M:%S) 2>/dev/null && mv $lsb/db/spin.db $lsb/db/spin.db$(date +%y-%m-%d-%H:%M:%S) 2>/dev/null
+    mkdir $lsb/db 2>/dev/null
+    tar -xf *backup.tar.gz -C $lsb/db/ spin.db
+    tar -xf *backup.tar.gz -C $lsb/ mc3_key.txt   
+fi
+killall -9 login.x86_64 2> /dev/null
+killall -9 client.x86_64 2> /dev/null
+echo "DONE";;
+    [4-4]   ) echo "4-CLEAN REPORTS"
+if [ -d $llb ]
+then
+  mv $llb/db/spin.db $llb/db/spin.db$(date +%y-%m-%d-%H:%M:%S)
+else
+  mv $lsb/db/spin.db $lsb/db/spin.db$(date +%y-%m-%d-%H:%M:%S)
+fi
+killall -9 client.x86_64
+echo "DONE";;
+    [5-5]   ) echo "DEVICE SERVER 7748d39"
+for f in start.lima init/{r0.sh,r90.sh,r180.sh,r270.sh} ; do
+    p=/opt/${f}
+    if [ -f ${p} ] && ! grep -q default_devices_service.ini ${p} ; then
+        sed -i 's|nohup ./$cmd.*|echo $cmd|g' ${p}
+        sed -i 's|nohup devices_server .*|nohup devices_server -c /opt/configs/default_devices_service.ini \&>/var/log/devices_server.log \&|g' ${p}
+    fi
+done
+#2
+cd /opt/configs
+wget -c https://s3-eu-west-1.amazonaws.com/suportfiles/USA/device_server/default_devices_service.ini
+#3
+cd /usr/local/bin/
+mv devices_server devices_server_last12.11.2020
+wget -c http://velesstorage.s3.amazonaws.com/hwd/devices_server_7748d39
+chmod +x devices_server_7748d39
+mv devices_server_7748d39 devices_server
+#4
+cd /opt/veles_server/
+mv cycle_veles_hwd_srv.sh cycle_veles_hwd_srv.sh_$(date +%y-%m-%d-%H:%M:%S)
+rm cycle_veles_hwd_srv.sh.old
+mv cycle_veles_hwd_srv_flash.sh cycle_veles_hwd_srv_flash.sh_$(date +%y-%m-%d-%H:%M:%S)
+init 6;;
+ [6-6]   ) echo "SPEEDTEST"
+ if [ -f $st ]
+then
+     echo "Wait a bit please..."
+    /opt/speedtest
+else
+  wget -O - https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python
+fi    
+echo "DONE";;
+ [7-7]   ) echo "Device F1 menu"
+ /opt/internet;;
+ [8-8]   ) 
+echo -e "Logs menu (for USA and DEFAULT only)\n" 
+echo "1 - Full logs"
+echo "2 - Full logs only device_server"
+echo "3 - Client logs"
+echo "4 - Back to main menu"  
+echo "Choose logs tupe:"
+read Keypress
+case "$Keypress" in
+    [1-1]   ) echo "Full logs"
+if [ -f $log0 ]
+then
+    tar -czvf /root/$(cat $lsb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $scl/logLima.txt* /var/log/* $lsb/config.ini* $lsb/mc3_key.txt $lsb/db/spin.db $lsb/logs/*
+elif [ -f $log1 ]
+then    
+    tar -czvf /root/$(cat $lsb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $scl/logClient.txt* /var/log/* $lsb/config.ini* $lsb/mc3_key.txt $lsb/db/spin.db $lsb/logs/*
+elif [ -f $log2 ]
+then
+    tar -czvf /root/$(cat $llb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $lcl/logLima.txt* /var/log/* $llb/config.ini* $llb/mc3_key.txt $llb/db/spin.db $llb/logs/*   
+elif [ -f $log3 ]
+then
+    tar -czvf /root/$(cat $llb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $lcl/logClient.txt* /var/log/* $llb/config.ini* $llb/mc3_key.txt $llb/db/spin.db $llb/logs/*
+fi
+echo "Full logs DONE";;
+    [2-2]   ) echo "Full logs only device_server"
+if [ -f $log0 ]
+then
+    tar -czvf /root/$(cat $lsb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $scl/logLima.txt* /var/log/devices_server* $lsb/config.ini* $lsb/mc3_key.txt $lsb/db/spin.db $lsb/logs/*
+elif [ -f $log1 ]
+then    
+    tar -czvf /root/$(cat $lsb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $scl/logClient.txt* /var/log/devices_server* $lsb/config.ini* $lsb/mc3_key.txt $lsb/db/spin.db $lsb/logs/*
+elif [ -f $log2 ]
+then
+    tar -czvf /root/$(cat $llb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $lcl/logLima.txt* /var/log/devices_server* $llb/config.ini* $llb/mc3_key.txt $llb/db/spin.db $llb/logs/*   
+elif [ -f $log3 ]
+then
+    tar -czvf /root/$(cat $llb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $lcl/logClient.txt* /var/log/devices_server* $llb/config.ini* $llb/mc3_key.txt $llb/db/spin.db $llb/logs/*
+fi
+echo "Full logs only device_server DONE";;
+    [3-3]   ) echo "Client logs"
+if [ -f $log0 ]
+then
+    tar -czvf /root/$(cat $lsb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $scl/logLima.txt*  $lsb/config.ini* $lsb/mc3_key.txt $lsb/db/spin.db $lsb/logs/*
+elif [ -f $log1 ]
+then    
+    tar -czvf /root/$(cat $lsb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $scl/logClient.txt*  $lsb/config.ini* $lsb/mc3_key.txt $lsb/db/spin.db $lsb/logs/*
+elif [ -f $log2 ]
+then
+    tar -czvf /root/$(cat $llb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $lcl/logLima.txt*  $llb/config.ini* $llb/mc3_key.txt $llb/db/spin.db $llb/logs/*   
+elif [ -f $log3 ]
+then
+    tar -czvf /root/$(cat $llb/mc3_key.txt)logs_`date +%d%b%Y`.tar.gz  $lcl/logClient.txt*  $llb/config.ini* $llb/mc3_key.txt $llb/db/spin.db $llb/logs/*
+fi
+echo "Client logs DONE";;
+      [4-4]   )
+      clear
+      ygunis;;
+esac;;
+
+ [9-9]   ) echo -e "MD5 CHECK in progress...\n"
+if [ -d $md5 ]
+then
+    cd $md5 && md5sum --check --quiet list.md5
+    cd $root
+else
+    cd $md51 && md5sum --check --quiet list.md5
+    cd $root
+fi;;    
+esac
