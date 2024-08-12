@@ -8,7 +8,7 @@ vernew=${2}
 current_date=$(date +"%Y-%m-%d")
 ### Run code 
 
-grep ${acc} /home/support/update_checker/branch.list | grep "${ver}\|${vernew}">result.txt
+grep -w "${acc}" /home/support/update_checker/branch.list | grep "${ver}\|${vernew}">result.txt
 sed -i 's/\r$//' ./result.txt
 sed -i 's/ *lin *//g' ./result.txt
 sed -i 's/ *unk *//g' ./result.txt
@@ -34,5 +34,5 @@ else
     echo "$(cat ./result.txt | head -n1 | awk '{print $2}') я хз"
 fi
 
-cat ./greped.txt >>./final_result.txt
+cat ./greped.txt >>./final_result_$(date +"%Y-%m-%d").txt
 rm result.txt greped.txt
