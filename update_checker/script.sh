@@ -31,7 +31,7 @@ elif grep -q 'NOT_UPDATED' result.txt && ! grep -q 'DONE' result.txt; then
 elif grep -q 'DONE' result.txt && ! grep -q 'NOT_UPDATED' result.txt; then
     echo "$(cat ./result.txt | head -n1 | awk '{print $2}') ОБНОВЛЕН" >greped.txt
 else
-    echo "(cat ./result.txt | head -n1 | awk '{print $2}') я хз"
+    echo "$(cat ./result.txt | head -n1 | awk '{print $2}') я хз"
 fi
 
 cat ./greped.txt >>./final_result.txt
