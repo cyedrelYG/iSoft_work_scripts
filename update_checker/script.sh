@@ -11,6 +11,7 @@ current_date=$(date +"%Y-%m-%d")
 grep ${acc} /home/support/update_checker/branch.list | grep "${ver}\|${vernew}">result.txt
 sed -i 's/\r$//' ./result.txt
 sed -i 's/ *lin *//g' ./result.txt
+sed -i 's/ *unk *//g' ./result.txt
 sed -i "/${vernew}/ s/$/ DONE/" ./result.txt 
 sed -i "/${ver}/ s/$/ NOT_UPDATED/" ./result.txt 
 sed -i "/$current_date/! s/$/ OFFLINE/" ./result.txt
@@ -24,7 +25,7 @@ elif grep -q 'NOT_UPDATED' result.txt && ! grep -q 'DONE' result.txt; then
     echo "$(cat ./result.txt | head -n1 | awk '{print $2}') ОФФЛАЙН" >greped.txt
     echo "$(grep NOT_UPDATED ./result.txt | awk '{print "-",$1,$3,$6,$7}')" >>greped.txt
     else 
-    echo "$(cat ./result.txt | head -n1 | awk '{print $2}') НЕ ОБНОВЛЕН" >greped.txt
+    echo "$(cat ./result.txt | head -n1 | awk '{print $2}') НЕ_ОБНОВЛЕН" >greped.txt
     echo "$(grep NOT_UPDATED ./result.txt | awk '{print "-",$1,$3,$6,$7}')" >>greped.txt
     fi
 elif grep -q 'DONE' result.txt && ! grep -q 'NOT_UPDATED' result.txt; then
