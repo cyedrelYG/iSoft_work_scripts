@@ -18,14 +18,14 @@ sed -i "/$current_date/ s/$/ WAS_ONLINE_TODAY/" ./result.txt
 
 if grep -q 'NOT_UPDATED' result.txt && grep -q 'DONE' result.txt; then
     echo "$(cat ./result.txt | head -n1 | awk '{print $2}') ЧАСТИЧНО" >greped.txt
-    echo "$(grep NOT_UPDATED ./result.txt | awk '{print $1,$3,$6,$7}')" >>greped.txt
+    echo "$(grep NOT_UPDATED ./result.txt | awk '{print "-",$1,$3,$6,$7}')" >>greped.txt
 elif grep -q 'NOT_UPDATED' result.txt && ! grep -q 'DONE' result.txt; then
     if grep -q 'OFFLINE' result.txt && ! grep -q 'ONLINE' result.txt; then
     echo "$(cat ./result.txt | head -n1 | awk '{print $2}') ОФФЛАЙН" >greped.txt
-    echo "$(grep NOT_UPDATED ./result.txt | awk '{print $1,$3,$6,$7}')" >>greped.txt
+    echo "$(grep NOT_UPDATED ./result.txt | awk '{print "-",$1,$3,$6,$7}')" >>greped.txt
     else 
     echo "$(cat ./result.txt | head -n1 | awk '{print $2}') НЕ ОБНОВЛЕН" >greped.txt
-    echo "$(grep NOT_UPDATED ./result.txt | awk '{print $1,$3,$6,$7}')" >>greped.txt
+    echo "$(grep NOT_UPDATED ./result.txt | awk '{print "-",$1,$3,$6,$7}')" >>greped.txt
     fi
 elif grep -q 'DONE' result.txt && ! grep -q 'NOT_UPDATED' result.txt; then
     echo "$(cat ./result.txt | head -n1 | awk '{print $2}') ОБНОВЛЕН" >greped.txt
